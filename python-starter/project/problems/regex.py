@@ -20,7 +20,7 @@ class RegexProblem(Problem):
             lines = f.readlines()
 
         log_pattern = re.compile(
-            r'^([0-9-]+)\s+([0-9:.]+)\s+(\d+)\s+(\d+)\s+([IDVEFAW])\s+([^:]+?):(?:\s+(.*))?$'
+            r'^([0-9-]+)\s+([0-9:.]+)\s+(\d+)\s+(\d+)\s+([IDVEFAW])\s+([^:]+?):(?:\s+(.*))?'
         )
 
         output_lines = []
