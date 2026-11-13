@@ -1,0 +1,2 @@
+10-15 10:18:51.254   601   601 E InputManager-JNI: at java.util.HashMap.putMapEntries (HashMap.java:500)
+10-15 10:18:51.300   221   221 D lowmemorykiller: Process started
