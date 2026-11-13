@@ -20,7 +20,7 @@ class RegexProblem(Problem):
             lines = f.readlines()
 
         log_pattern = re.compile(
-            r'^([0-9-]+)\s+([0-9:.]+)\s+(\d+)\s+(\d+)\s+([IDVEFAW])\s+([^:]+?):(?:\s+(.*))?'
+            r'^([0-9-]+)\s+([0-9:.]+)\s+(\d+)\s+(\d+)\s+([IDVEFAW])\s+([^:]+?):\s*(.*)$'
         )
 
         output_lines = []
@@ -57,7 +57,7 @@ class RegexProblem(Problem):
                 m = log_pattern.match(stripped)
                 if m:
                     level = m.group(5)
-                    message = m.group(7) or ''
+                    message = m.group(7)
                     in_error = (level == 'E')
                     if in_error:
                         output_lines.extend(java_file_pattern.findall(message))
