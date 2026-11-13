@@ -23,57 +23,49 @@ class RegexProblem(Problem):
         output_lines = []
 
         if rgx_task == 1:
-            c1 = c2 = c3 = c4 = c5 = c6 = c7 = c8 = c9 = c10 = 0
-            
-            for line in lines:
-                m = log_pattern.match(line.strip())
-                if not m:
-                    continue
-                date, time_str, pid, tid, level, tag, message = m.groups()
-                message = message if message else ""
+            p1 = re.compile(r'^\d{2}-15\b')
+            p2 = re.compile(r'^\d{2}-15\b\s+10:18:51')
+            p3 = re.compile(r'^\S+\s+\d{2}:\d{2}:51')
+            p4 = re.compile(r'^\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+.*\blowmemorykiller\b')
+            p5 = re.compile(r'^\S+\s+10:18:51\b\s+221\b')
+            p6 = re.compile(r'^\S+\s+\S+\s+\S+\s+\S+\s+E\b')
+            p7 = re.compile(r'^\S+\s+\S+\s+\S+\s+\S+\s+W\s+PackageManager\b')
+            p8 = re.compile(r'^\S+\s+\S+\s+\S+\s+\S+\s+D\s+.*?\bExoPlayer\b')
+            p9 = re.compile(r'^\S+\s+\S+\s+\S+\s+\S+\s+[EW]\s+.*?\b[\w_-]+\.java:')
+            p10 = re.compile(r'^([0-9-]+)\s+([0-9:]+)\s+(\d+)\s+(\d+)\s+([IDVEFAW])\s+([^:]+?):\s+.*\bThread\b')
 
-                if '10-15' in date:
-                    c1 += 1
-                
-                if '10-15' in date and time_str.startswith('10:18:51'):
-                    c2 += 1
-                
-                if ':51' in time_str:
-                    c3 += 1
-                
-                if 'lowmemorykiller' in tag:
-                    c4 += 1
-                
-                if time_str.startswith('10:18:51') and pid == '221':
-                    c5 += 1
-                
-                if level == 'E':
-                    c6 += 1
-                
-                if level == 'W' and tag.strip() == 'PackageManager':
-                    c7 += 1
-                
-                if level == 'D' and ('ExoPlayer' in tag or 'ExoPlayer' in message):
-                    c8 += 1
-                
-                if level in ('E', 'W') and '.java:' in message:
-                    c9 += 1
-                
-                if 'Thread' in message:
-                    c10 += 1
+            c1 = c2 = c3 = c4 = c5 = c6 = c7 = c8 = c9 = c10 = 0
+
+            for line in lines:
+                stripped = line.strip()
+                if p1.match(stripped): c1 += 1
+                if p2.match(stripped): c2 += 1
+                if p3.match(stripped): c3 += 1
+                if p4.search(stripped): c4 += 1
+                if p5.match(stripped): c5 += 1
+                if p6.match(stripped): c6 += 1
+                if p7.match(stripped): c7 += 1
+                if p8.match(stripped): c8 += 1
+                if p9.match(stripped): c9 += 1
+                if p10.match(stripped): c10 += 1
 
             output_lines = [str(c1), str(c2), str(c3), str(c4), str(c5), str(c6), str(c7), str(c8), str(c9), str(c10)]
 
         elif rgx_task == 2:
             java_file_pattern = re.compile(r'([\w_-]+\.java)(?::\d+)?')
             for line in lines:
-                m = log_pattern.match(line.strip())
+                stripped = line.strip()
+                m = log_pattern.match(stripped)
                 if m:
                     _, _, _, _, level, _, message = m.groups()
                     if level == 'E' and message:
                         matches = java_file_pattern.findall(message)
                         for match in matches:
                             output_lines.append(match)
+                else:
+                    matches = java_file_pattern.findall(stripped)
+                    for match in matches:
+                        output_lines.append(match)
 
         elif rgx_task == 3:
             seen_pids = []
@@ -82,7 +74,7 @@ class RegexProblem(Problem):
                 if m:
                     _, _, pid, _, _, _, _ = m.groups()
                     if pid not in seen_pids:
-                        seen_pids.append(pid)
+                    	seen_pids.append(pid)
             output_lines = seen_pids
 
         elif rgx_task == 4:
@@ -96,9 +88,9 @@ class RegexProblem(Problem):
             if error_counts:
                 max_pid = max(error_counts, key=error_counts.get)
                 max_count = error_counts[max_pid]
-                output_lines = [f"${max_pid}={max_count}$ ({max_count} errors)"]
+                output_lines = [f"{max_pid}={max_count} ({max_count} errors)"]
             else:
-                output_lines = ["$0=0$ (0 errors)"]
+                output_lines = ["0=0 (0 errors)"]
 
         elif rgx_task == 5:
             main_thread_errors = 0
