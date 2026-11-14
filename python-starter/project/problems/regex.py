@@ -35,9 +35,9 @@ class RegexProblem(Problem):
                 re.compile(r'^\S+\s+10:18:51\.\d+\s+221\s+'),
                 re.compile(head + r'E\s'),
                 re.compile(head + r'W\s+PackageManager\s*:'),
-                re.compile(head + r'D\s+[^:]*ExoPlayer[^:]*:'),
+                re.compile(head + r'D\s+.*ExoPlayer'),
                 re.compile(head + r'[EW]\s+.*\b[\w$-]+\.java:'),
-                re.compile(head + r'[IDVEFAW]\s+[^:]+:\s.*\bThread\b'),
+                re.compile(head + r'[IDVEFAW]\s+[^:]+:\s.*Thread'),
             ]
             counts = [0] * len(patterns)
 
