@@ -76,7 +76,7 @@ class MinimizationProblem(Problem):
                                 marked[(s2, s1)] = True
                                 changed = True
                                 break
-                            elif t1 != t2:
+                            elif (t1 is None) != (t2 is None):
                                 marked[(s1, s2)] = True
                                 marked[(s2, s1)] = True
                                 changed = True
